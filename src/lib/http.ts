@@ -82,7 +82,7 @@ const request = async <Response>(
             ? envConfig.NEXT_PUBLIC_API_ENDPOINT
             : options.baseUrl
 
-    const fullUrl = `${baseUrl}${normalizePath(url)}`;
+    const fullUrl = `${baseUrl}/${normalizePath(url)}`;
     const res = await fetch(fullUrl, {
         ...options,
         headers: {
@@ -149,7 +149,7 @@ const request = async <Response>(
             const { accessToken, refreshToken } = (payload as LoginResType).data
             localStorage.setItem('accessToken', accessToken)
             localStorage.setItem('refreshToken', refreshToken)
-        } else if ('api/auth/logout' === normalizePath(url)) {
+        } else if (normalizeUrl === 'api/auth/logout') {
             localStorage.removeItem('accessToken')
             localStorage.removeItem('refreshToken')
         }
