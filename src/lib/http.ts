@@ -131,6 +131,8 @@ const request = async <Response>(
                     }
                 }
             } else {
+                // Đây là trường hợp khi access token còn hạn
+                // và khi gọi API ở NextJS server (Route Handler, ServerComponent) đến Server Backend 
                 const accessToken = (options?.headers as any)?.Authorization.split(
                     'Bearer '
                 )[1]
