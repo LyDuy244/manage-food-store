@@ -21,7 +21,7 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { getVietnameseTableStatus } from "@/lib/utils";
+import { getVietnameseTableStatus, handleErrorApi } from "@/lib/utils";
 import {
   CreateTableBody,
   CreateTableBodyType,
@@ -34,8 +34,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useAddTableMutation } from "@/app/queries/useTable";
+import { toast } from "@/hooks/use-toast";
 
 export default function AddTable() {
+  const addTableMutation = useAddTableMutation();
   const [open, setOpen] = useState(false);
   const form = useForm<CreateTableBodyType>({
     resolver: zodResolver(CreateTableBody),
@@ -45,6 +48,20 @@ export default function AddTable() {
       status: TableStatus.Hidden,
     },
   });
+
+  const onSubmit = async (values: CreateTableBodyType) => {
+    if (addTableMutation.isPending) return;
+    try {
+      const result = await addTableMutation.mutateAsync(values);
+      toast({
+        description: result.payload.message,
+      });
+      setOpen(false);
+      form.reset();
+    } catch (error) {
+      handleErrorApi({ error, setError: form.setError });
+    }
+  };
   return (
     <Dialog onOpenChange={setOpen} open={open}>
       <DialogTrigger asChild>
@@ -67,6 +84,8 @@ export default function AddTable() {
             noValidate
             className="grid auto-rows-max items-start gap-4 md:gap-8"
             id="add-table-form"
+            onSubmit={form.handleSubmit(onSubmit)}
+            onReset={() => form.reset()}
           >
             <div className="grid gap-4 py-4">
               <FormField

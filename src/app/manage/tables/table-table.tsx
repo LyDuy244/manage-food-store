@@ -43,12 +43,22 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { getVietnameseTableStatus } from "@/lib/utils";
+import {
+  getTableLink,
+  getVietnameseTableStatus,
+  handleErrorApi,
+} from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
 import AutoPagination from "@/components/auto-pagination";
 import { TableListResType } from "@/schemaValidations/table.schema";
 import EditTable from "@/app/manage/tables/edit-table";
 import AddTable from "@/app/manage/tables/add-table";
+import {
+  useDeleteTableMutation,
+  useTableListQuery,
+} from "@/app/queries/useTable";
+import QRcodeTable from "@/components/qrcode-table";
+import { toast } from "@/hooks/use-toast";
 
 type TableItem = TableListResType["data"][0];
 
@@ -71,6 +81,10 @@ export const columns: ColumnDef<TableItem>[] = [
     cell: ({ row }) => (
       <div className="capitalize">{row.getValue("number")}</div>
     ),
+    filterFn: (row, columnId, filterValue) => {
+      if (!filterValue) return true;
+      return String(filterValue) === String(row.getValue("number"));
+    },
   },
   {
     accessorKey: "capacity",
@@ -89,7 +103,12 @@ export const columns: ColumnDef<TableItem>[] = [
   {
     accessorKey: "token",
     header: "QR Code",
-    cell: ({ row }) => <div>{row.getValue("number")}</div>,
+    cell: ({ row }) => (
+      <QRcodeTable
+        token={row.getValue("token")}
+        tableNumber={row.getValue("number")}
+      />
+    ),
   },
   {
     id: "actions",
@@ -130,6 +149,20 @@ function AlertDialogDeleteTable({
   tableDelete: TableItem | null;
   setTableDelete: (value: TableItem | null) => void;
 }) {
+  const { mutateAsync } = useDeleteTableMutation();
+  const deleteTable = async () => {
+    if (tableDelete) {
+      try {
+        const result = await mutateAsync(tableDelete.number);
+        setTableDelete(null);
+        toast({
+          title: result.payload.message,
+        });
+      } catch (error) {
+        handleErrorApi({ error });
+      }
+    }
+  };
   return (
     <AlertDialog
       open={Boolean(tableDelete)}
@@ -167,7 +200,9 @@ export default function TableTable() {
   // const params = Object.fromEntries(searchParam.entries())
   const [tableIdEdit, setTableIdEdit] = useState<number | undefined>();
   const [tableDelete, setTableDelete] = useState<TableItem | null>(null);
-  const data: any[] = [];
+  const tableListQuery = useTableListQuery();
+  const data: TableListResType["data"] | [] =
+    tableListQuery.data?.payload.data ?? [];
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
