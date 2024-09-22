@@ -3,7 +3,7 @@ import { LoginBodyType, LoginResType, LogoutBodyType, RefreshTokenBodyType, Refr
 
 const authApiRequest = {
     refreshTokenRequest: null as Promise<{
-        status: number,
+        status: number
         payload: RefreshTokenResType
     }> | null,
     sLogin: (body: LoginBodyType) => http.post<LoginResType>("/auth/login", body),
@@ -18,12 +18,20 @@ const authApiRequest = {
     }),
     sRefreshToken: (body: RefreshTokenBodyType) => http.post<RefreshTokenResType>("/auth/refresh-token", body),
     async refreshToken() {
-        if (this.refreshTokenRequest) return
-        this.refreshTokenRequest = http.post<RefreshTokenResType>("/api/auth/refresh-token", null, { baseUrl: "" })
+        if (this.refreshTokenRequest) {
+            return this.refreshTokenRequest
+        }
+        this.refreshTokenRequest = http.post<RefreshTokenResType>(
+            '/api/auth/refresh-token',
+            null,
+            {
+                baseUrl: ''
+            }
+        )
         const result = await this.refreshTokenRequest
         this.refreshTokenRequest = null
-        return result;
-    },
+        return result
+    }
 }
 
 export default authApiRequest;

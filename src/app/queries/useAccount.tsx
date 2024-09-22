@@ -1,6 +1,9 @@
 import accountApiRequest from "@/apiRequests/account";
-import { AccountResType } from "@/schemaValidations/account.schema";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import {
+  AccountResType,
+  UpdateEmployeeAccountBodyType,
+} from "@/schemaValidations/account.schema";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useAccountMe = () => {
   return useQuery({
@@ -27,9 +30,71 @@ export const useUpdateMeMutation = () => {
   });
 };
 
-
 export const useChangePasswordMutation = () => {
   return useMutation({
-    mutationFn: accountApiRequest.changePassword
-  })
-}
+    mutationFn: accountApiRequest.changePassword,
+  });
+};
+
+export const useGetAccountList = () => {
+  return useQuery({
+    queryKey: ["accounts"],
+    queryFn: accountApiRequest.list,
+  });
+};
+
+export const useGetAccount = ({
+  id,
+  enabled,
+}: {
+  id: number;
+  enabled: boolean;
+}) => {
+  return useQuery({
+    queryKey: ["account", id],
+    queryFn: () => accountApiRequest.getEmployee(id),
+    enabled,
+  });
+};
+
+export const useAddAccoutnMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: accountApiRequest.addEmployee,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["accounts"],
+      });
+    },
+  });
+};
+
+export const useUpdateAccountMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      id,
+      ...body
+    }: UpdateEmployeeAccountBodyType & { id: number }) =>
+      accountApiRequest.updateEmployee(id, body),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["accounts"],
+      });
+    },
+  });
+};
+
+export const useDeleteAccountMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: accountApiRequest.deleteEmployee,
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["accounts"],
+      });
+    },
+  });
+};
