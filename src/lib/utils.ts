@@ -5,8 +5,10 @@ import { clsx, type ClassValue } from "clsx"
 import { UseFormSetError } from "react-hook-form"
 import { twMerge } from "tailwind-merge"
 import jwt from "jsonwebtoken";
-import { DishStatus, OrderStatus, TableStatus } from "@/constants/type"
+import { DishStatus, OrderStatus, Role, TableStatus } from "@/constants/type"
 import envConfig from "@/config"
+import { TokenPayload } from "@/types/jwt.types"
+import guestApiRequest from "@/apiRequests/guest"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -66,14 +68,8 @@ export const checkAndRefreshToken = async (param?: {
     return;
   }
 
-  const decodeAccessToken = jwt.decode(accessToken) as {
-    exp: number;
-    iat: number;
-  };
-  const decodeRefreshToken = jwt.decode(refreshToken) as {
-    exp: number;
-    iat: number;
-  };
+  const decodeAccessToken = decodeToken(accessToken);
+  const decodeRefreshToken = decodeToken(refreshToken);
   //   Thời điểm hết hạn của token tính theo epoch time (s)
   // Còn khi dùng cú pháp new Date() thì sẽ trả về (ml)
   const now = (new Date().getTime() / 1000) - 1;
@@ -92,7 +88,8 @@ export const checkAndRefreshToken = async (param?: {
   ) {
     // Gọi API refresh token
     try {
-      const res = await authApiRequest.refreshToken();
+      const role = decodeRefreshToken.role;
+      const res = role === Role.Guest ? await guestApiRequest.refreshToken() : await authApiRequest.refreshToken();
       setAccessTokenToLocalStorage(res.payload.data.accessToken);
       setRefreshTokenToLocalStorage(res.payload.data.refreshToken);
       param?.onSuccess && param?.onSuccess();
@@ -148,4 +145,8 @@ export const getVietnameseTableStatus = (status: (typeof TableStatus)[keyof type
 
 export const getTableLink = ({ token, tableNumber }: { token: string; tableNumber: number }) => {
   return envConfig.NEXT_PUBLIC_URL + '/tables/' + tableNumber + '?token=' + token
+}
+
+export const decodeToken = (token: string) => {
+  return jwt.decode(token) as TokenPayload;
 }

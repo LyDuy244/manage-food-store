@@ -24,7 +24,7 @@ export default function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const clearTokens = searchParams.get("clearTokens");
-  const { setIsAuth } = useAppContext();
+  const { setRole } = useAppContext();
 
   const loginMutation = useLoginMutation();
   const form = useForm<LoginBodyType>({
@@ -41,7 +41,7 @@ export default function LoginForm() {
       const result = await loginMutation.mutateAsync(data);
       toast({ description: result.payload.message });
       router.push("/manage/dashboard");
-      setIsAuth(true)
+      setRole(result.payload.data.account.role);
     } catch (error: any) {
       handleErrorApi({
         error,
@@ -52,9 +52,9 @@ export default function LoginForm() {
 
   useEffect(() => {
     if (clearTokens) {
-      setIsAuth(false);
+      setRole();
     }
-  }, [clearTokens, setIsAuth]);
+  }, [clearTokens, setRole]);
 
   return (
     <Card className="mx-auto max-w-sm">
