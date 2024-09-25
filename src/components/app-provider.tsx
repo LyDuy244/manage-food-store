@@ -13,6 +13,8 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
+// staleTime: thời gian data còn mới => hết thời gian tanstack mặc định là data cũ và fetch lại data
+// gc: (5 phút) thời gian data sẽ bị xóa  đi
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

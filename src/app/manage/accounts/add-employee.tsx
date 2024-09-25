@@ -21,7 +21,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useAddAccoutnMutation } from "@/app/queries/useAccount";
+import { useAddAccountMutation } from "@/app/queries/useAccount";
 import { useUploadMediaMutation } from "@/app/queries/useMedia";
 import { toast } from "@/hooks/use-toast";
 import { handleErrorApi } from "@/lib/utils";
@@ -29,7 +29,7 @@ import { handleErrorApi } from "@/lib/utils";
 export default function AddEmployee() {
   const [file, setFile] = useState<File | null>(null);
   const [open, setOpen] = useState(false);
-  const addAccountMutation = useAddAccoutnMutation();
+  const addAccountMutation = useAddAccountMutation();
   const uploadMediaMutation = useUploadMediaMutation();
 
   const avatarInputRef = useRef<HTMLInputElement | null>(null);

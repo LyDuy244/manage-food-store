@@ -5,12 +5,22 @@ import { useGuestOrderMutation } from "@/app/queries/useGuest";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { DishStatus } from "@/constants/type";
-import { formatCurrency, handleErrorApi } from "@/lib/utils";
-import { GuestCreateOrdersBodyType } from "@/schemaValidations/guest.schema";
+import { toast } from "@/hooks/use-toast";
+import socket from "@/lib/socket";
+import {
+  formatCurrency,
+  getVietnameseOrderStatus,
+  handleErrorApi,
+} from "@/lib/utils";
+import {
+  GuestCreateOrdersBodyType,
+  GuestCreateOrdersResType,
+} from "@/schemaValidations/guest.schema";
+import { UpdateOrderResType } from "@/schemaValidations/order.schema";
 import { Minus, Plus } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 export default function MenuOrder() {
   const { data } = useDishListQuery();
@@ -48,6 +58,9 @@ export default function MenuOrder() {
       handleErrorApi({ error });
     }
   };
+
+
+
   return (
     <>
       {dishes
