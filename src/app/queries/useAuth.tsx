@@ -13,4 +13,8 @@ export const useLogoutMutation = () => {
   });
 };
 
-
+export const useSetTokenToCookieMutation = () => {
+  return useMutation({
+    mutationFn: authApiRequest.setTokenToCookie,
+  });
+};

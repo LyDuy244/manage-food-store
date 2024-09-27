@@ -11,6 +11,7 @@ import { TokenPayload } from "@/types/jwt.types"
 import guestApiRequest from "@/apiRequests/guest"
 import { BookX, CookingPot, HandCoins, Loader, Truck } from 'lucide-react'
 import { format } from "date-fns"
+import { io } from "socket.io-client"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -58,7 +59,8 @@ export const removeTokensFromLocalStorage = () => {
 
 export const checkAndRefreshToken = async (param?: {
   onError?: () => void,
-  onSuccess?: () => void
+  onSuccess?: () => void,
+  force?: boolean
 }) => {
   // Không nên đưa logic lấy access và refresh token ra khỏi function checkAndRefreshToken
   // vì để mỗi lần được gọi thì ta sẽ có 1 access và refresh token mới
@@ -85,6 +87,7 @@ export const checkAndRefreshToken = async (param?: {
   // thời gian còn lại sẽ tính dựa trên công thức decodeAccessToken.exp - now
   // thời gian hết hạn của accessToken dưa trên công thức decodeAccessToken.exp - decodeAccessToken.iat
   if (
+    param?.force ||
     decodeAccessToken.exp - now <
     (decodeAccessToken.exp - decodeAccessToken.iat) / 3
   ) {
@@ -178,3 +181,11 @@ export const OrderStatusIcon = {
   [OrderStatus.Delivered]: Truck,
   [OrderStatus.Paid]: HandCoins
 }
+
+
+export const getRoleFromClient = () => {
+  const accessToken = getAccessTokenFromLocalStorage();
+  const { role } = accessToken ? decodeToken(accessToken) : { role: undefined };
+  return role;
+}
+

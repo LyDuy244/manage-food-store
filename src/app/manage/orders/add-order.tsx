@@ -42,11 +42,7 @@ export default function AddOrder() {
   const [isNewGuest, setIsNewGuest] = useState(true);
   const [orders, setOrders] = useState<CreateOrdersBodyType["orders"]>([]);
   const { data } = useDishListQuery();
-  const dishes: DishListResType["data"] | [] = useMemo(
-    () => data?.payload.data ?? [],
-    [data]
-  );
-
+  const dishes = useMemo(() => data?.payload.data ?? [], [data]);
   const totalPrice = useMemo(() => {
     return dishes.reduce((result, dish) => {
       const order = orders.find((order) => order.dishId === dish.id);
@@ -66,7 +62,6 @@ export default function AddOrder() {
   });
   const name = form.watch("name");
   const tableNumber = form.watch("tableNumber");
-
   const handleQuantityChange = (dishId: number, quantity: number) => {
     setOrders((prevOrders) => {
       if (quantity === 0) {
@@ -86,11 +81,11 @@ export default function AddOrder() {
     try {
       let guestId = selectedGuest?.id;
       if (isNewGuest) {
-        const guestResponse = await createGuestMutation.mutateAsync({
+        const guestRes = await createGuestMutation.mutateAsync({
           name,
           tableNumber,
         });
-        guestId = guestResponse.payload.data.id;
+        guestId = guestRes.payload.data.id;
       }
       if (!guestId) {
         toast({
@@ -104,10 +99,12 @@ export default function AddOrder() {
       });
       reset();
     } catch (error) {
-      handleErrorApi({ error, setError: form.setError });
+      handleErrorApi({
+        error,
+        setError: form.setError,
+      });
     }
   };
-
   const reset = () => {
     form.reset();
     setSelectedGuest(null);

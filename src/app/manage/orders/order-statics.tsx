@@ -63,7 +63,6 @@ export default function OrderStatics({
 }) {
   const [selectedTableNumber, setSelectedTableNumber] = useState<number>(0);
   const selectedServingGuest = servingGuestByTableNumber[selectedTableNumber];
-
   return (
     <Fragment>
       <Dialog

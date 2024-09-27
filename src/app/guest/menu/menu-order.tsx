@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { DishStatus } from "@/constants/type";
 import { toast } from "@/hooks/use-toast";
-import socket from "@/lib/socket";
 import {
   formatCurrency,
   getVietnameseOrderStatus,

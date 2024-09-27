@@ -9,7 +9,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { cn } from "@/lib/utils";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 interface Props {
   page: number;
   pageSize: number;
@@ -120,7 +120,7 @@ export default function AutoPagination({
                   onClick(pageNumber);
                 }}
                 variant={pageNumber === page ? "outline" : "ghost"}
-                className="w-9 h-9 p-0"
+                className=" h-9 p-2"
               >
                 {pageNumber}
               </Button>
@@ -153,14 +153,12 @@ export default function AutoPagination({
           ) : (
             <Button
               disabled={page === 1}
-              className={cn({
-                "cursor-not-allowed": page === 1,
-              })}
+              className=" h-9 p-0 px-2"
               onClick={() => {
                 onClick(page - 1);
               }}
             >
-              <ChevronLeft className="w-5 h-5" />
+              <ChevronLeft className="w-5 h-5" /> Next
             </Button>
           )}
         </PaginationItem>
@@ -187,14 +185,13 @@ export default function AutoPagination({
           ) : (
             <Button
               disabled={page === 1}
-              className={cn({
-                "cursor-not-allowed": page === 1,
-              })}
+              className=" h-9 p-0 py-2"
               onClick={() => {
                 onClick(page - 1);
               }}
+              variant="ghost"
             >
-              <ChevronLeft className="w-5 h-5" />
+              Previous <ChevronRight className="w-5 h-5" />
             </Button>
           )}
         </PaginationItem>

@@ -1,12 +1,11 @@
-import envConfig from '@/config';
-import { getAccessTokenFromLocalStorage } from '@/lib/utils';
-import { io } from 'socket.io-client';
+import envConfig from "@/config"
+import { io } from "socket.io-client"
 
-const socket = io(envConfig.NEXT_PUBLIC_API_ENDPOINT, {
-    auth: {
-        Authorization: `Bearer ${getAccessTokenFromLocalStorage()}`,
-    },
-    transports: ['websocket']
-})
-
-export default socket;
+export const generateSocketInstance = (accessToken: string) => {
+    return io(envConfig.NEXT_PUBLIC_API_ENDPOINT, {
+        auth: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+        transports: ["websocket"],
+    })
+}

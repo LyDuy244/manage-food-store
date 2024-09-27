@@ -49,16 +49,16 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { endOfDay, format, startOfDay } from "date-fns";
+import { endOfDay, format, startOfDay, subDays } from "date-fns";
 import {
   useGetOrderListQuery,
   useUpdateOrderMutation,
 } from "@/app/queries/useOrder";
 import { useTableListQuery } from "@/app/queries/useTable";
 import TableSkeleton from "@/app/manage/orders/table-skeleton";
-import socket from "@/lib/socket";
 import { toast } from "@/hooks/use-toast";
 import { GuestCreateOrdersResType } from "@/schemaValidations/guest.schema";
+import { useAppContext } from "@/components/app-provider";
 
 export const OrderTableContext = createContext({
   setOrderIdEdit: (value: number | undefined) => {},
@@ -84,9 +84,10 @@ export type OrderObjectByGuestID = Record<number, GetOrdersResType["data"]>;
 export type ServingGuestByTableNumber = Record<number, OrderObjectByGuestID>;
 
 const PAGE_SIZE = 10;
-const initFromDate = startOfDay(new Date());
+const initFromDate = startOfDay(subDays(new Date(), 1));
 const initToDate = endOfDay(new Date());
 export default function OrderTable() {
+  const { socket } = useAppContext();
   const searchParam = useSearchParams();
   const [openStatusFilter, setOpenStatusFilter] = useState(false);
   const [fromDate, setFromDate] = useState(initFromDate);
@@ -161,11 +162,11 @@ export default function OrderTable() {
   };
 
   useEffect(() => {
-    if (socket.connected) {
+    if (socket?.connected) {
       onConnect();
     }
     function onConnect() {
-      console.log(socket.id);
+      console.log(socket?.id);
     }
 
     function onDisconnect() {
@@ -205,23 +206,24 @@ export default function OrderTable() {
       refetch();
     }
 
-    socket.on("payment", onPayment);
-    socket.on("update-order", onUpdateOrder);
-    socket.on("new-order", onNewOrder);
-    socket.on("connect", onConnect);
-    socket.on("disconnect", onDisconnect);
-    socket.on("connect_error", (err) => {
+    socket?.on("payment", onPayment);
+    socket?.on("update-order", onUpdateOrder);
+    socket?.on("new-order", onNewOrder);
+    socket?.on("connect", onConnect);
+    socket?.on("disconnect", onDisconnect);
+    socket?.on("connect_error", (err) => {
       // the reason of the error, for example "xhr poll error"
       console.log(err.message);
     });
+
     return () => {
-      socket.off("connect", onConnect);
-      socket.off("disconnect", onDisconnect);
-      socket.off("new-order", onNewOrder);
-      socket.off("update-order", onUpdateOrder);
-      socket.off("payment", onPayment);
+      socket?.off("connect", onConnect);
+      socket?.off("disconnect", onDisconnect);
+      socket?.off("new-order", onNewOrder);
+      socket?.off("update-order", onUpdateOrder);
+      socket?.off("payment", onPayment);
     };
-  }, [fromDate, refetchOrderList, toDate]);
+  }, [fromDate, refetchOrderList, socket, toDate]);
 
   return (
     <OrderTableContext.Provider

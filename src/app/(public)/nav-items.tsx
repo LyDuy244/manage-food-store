@@ -61,7 +61,7 @@ const menuItems: {
 // Client: Đầu tiên client hiển thị là Món ăn, Đăng nhập. Nhưng ngay sau đó client render ra Món ăn Đơn hàng, Quản lý do check được trạng thái đăng nhập của user
 
 export default function NavItems({ className }: { className?: string }) {
-  const { role, setRole } = useAppContext();
+  const { role, setRole, disconnectSocket } = useAppContext();
   const ownerLogoutMutation = useLogoutMutation();
   const guestLogoutMutation = useGuestLogoutMutation();
   const logoutMutation =
@@ -72,8 +72,9 @@ export default function NavItems({ className }: { className?: string }) {
     if (logoutMutation.isPending) return;
     try {
       await logoutMutation.mutateAsync();
-      router.push("/");
       setRole();
+      disconnectSocket();
+      router.push("/");
     } catch (error) {
       handleErrorApi({ error });
     }

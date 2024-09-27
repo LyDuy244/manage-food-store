@@ -1,5 +1,8 @@
 "use client";
+import ListenLogoutSocket from "@/components/listenLogoutSocket";
 import RefreshToken from "@/components/refresh-token";
+import envConfig from "@/config";
+import { generateSocketInstance } from "@/lib/socket";
 import {
   decodeToken,
   getAccessTokenFromLocalStorage,
@@ -28,13 +31,18 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from "react";
 
+import { io, type Socket } from "socket.io-client";
 const AppContext = createContext({
   role: undefined as RoleType | undefined,
   setRole: (role?: RoleType | undefined) => {},
   isAuth: false,
+  socket: undefined as Socket | undefined,
+  setSocket: (socket?: Socket | undefined) => {},
+  disconnectSocket: () => {},
 });
 
 export const useAppContext = () => {
@@ -46,14 +54,26 @@ export default function AppProvider({
 }: {
   children: React.ReactNode;
 }) {
+  const [socket, setSocket] = useState<Socket | undefined>(undefined);
   const [role, setRoleState] = useState<RoleType | undefined>();
+  const count = useRef(0);
   useEffect(() => {
-    const accessToken = getAccessTokenFromLocalStorage();
-    if (accessToken) {
-      const role = decodeToken(accessToken).role;
-      setRoleState(role);
+    if (count.current === 0) {
+      const accessToken = getAccessTokenFromLocalStorage();
+      if (accessToken) {
+        const role = decodeToken(accessToken).role;
+        setRoleState(role);
+        setSocket(generateSocketInstance(accessToken));
+      }
+      count.current++;
     }
   }, []);
+
+  const disconnectSocket = useCallback(() => {
+    socket?.disconnect();
+    setSocket(undefined);
+  }, [socket, setSocket]);
+
   const setRole = useCallback((role?: RoleType | undefined) => {
     setRoleState(role);
     if (!role) {
@@ -64,10 +84,13 @@ export default function AppProvider({
 
   return (
     // Provide the client to your App
-    <AppContext.Provider value={{ role, setRole, isAuth }}>
+    <AppContext.Provider
+      value={{ role, setRole, isAuth, socket, setSocket, disconnectSocket }}
+    >
       <QueryClientProvider client={queryClient}>
         {children}
         <RefreshToken />
+        <ListenLogoutSocket />
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </AppContext.Provider>

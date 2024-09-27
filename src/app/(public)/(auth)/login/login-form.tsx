@@ -15,16 +15,40 @@ import { LoginBody, LoginBodyType } from "@/schemaValidations/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLoginMutation } from "@/app/queries/useAuth";
 import { toast } from "@/hooks/use-toast";
-import { handleErrorApi, removeTokensFromLocalStorage } from "@/lib/utils";
+import {
+  getAccessTokenFromLocalStorage,
+  handleErrorApi,
+  removeTokensFromLocalStorage,
+} from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { useAppContext } from "@/components/app-provider";
-
+import { io } from "socket.io-client";
+import envConfig from "@/config";
+import { generateSocketInstance } from "@/lib/socket";
+import Link from "next/link";
+const getOauthGoogleUrl = () => {
+  const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth";
+  const options = {
+    redirect_uri: envConfig.NEXT_PUBLIC_GOOGLE_AUTHORIZED_REDIRECT_URI,
+    client_id: envConfig.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+    access_type: "offline",
+    response_type: "code",
+    prompt: "consent",
+    scope: [
+      "https://www.googleapis.com/auth/userinfo.profile",
+      "https://www.googleapis.com/auth/userinfo.email",
+    ].join(" "),
+  };
+  const qs = new URLSearchParams(options);
+  return `${rootUrl}?${qs.toString()}`;
+};
+const googleOauthUrl = getOauthGoogleUrl();
 export default function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const clearTokens = searchParams.get("clearTokens");
-  const { setRole } = useAppContext();
+  const { setRole, setSocket } = useAppContext();
 
   const loginMutation = useLoginMutation();
   const form = useForm<LoginBodyType>({
@@ -42,6 +66,7 @@ export default function LoginForm() {
       toast({ description: result.payload.message });
       router.push("/manage/dashboard");
       setRole(result.payload.data.account.role);
+      setSocket(generateSocketInstance(result.payload.data.accessToken));
     } catch (error: any) {
       handleErrorApi({
         error,
@@ -116,9 +141,11 @@ export default function LoginForm() {
               <Button type="submit" className="w-full">
                 Đăng nhập
               </Button>
-              <Button variant="outline" className="w-full" type="button">
-                Đăng nhập bằng Google
-              </Button>
+              <Link href={googleOauthUrl}>
+                <Button variant="outline" className="w-full" type="button">
+                  Đăng nhập bằng Google
+                </Button>
+              </Link>
             </div>
           </form>
         </Form>

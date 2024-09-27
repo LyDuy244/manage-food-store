@@ -91,8 +91,8 @@ export default function GuestsDialog({
   const [fromDate, setFromDate] = useState(initFromDate);
   const [toDate, setToDate] = useState(initToDate);
   const guestListQuery = useGetGuestListQuery({
-    fromDate: initFromDate,
-    toDate: initToDate,
+    fromDate,
+    toDate,
   });
   const data = guestListQuery.data?.payload.data ?? [];
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -274,7 +274,7 @@ export default function GuestsDialog({
                 <AutoPagination
                   page={table.getState().pagination.pageIndex + 1}
                   pageSize={table.getPageCount()}
-                  pathname="/manage/Guests"
+                  pathname="/"
                   isLink={false}
                   onClick={(pageNumber) =>
                     table.setPagination({
