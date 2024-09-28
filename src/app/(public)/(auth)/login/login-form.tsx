@@ -22,7 +22,7 @@ import {
 } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
-import { useAppContext } from "@/components/app-provider";
+import { useAppStore } from "@/components/app-provider";
 import { io } from "socket.io-client";
 import envConfig from "@/config";
 import { generateSocketInstance } from "@/lib/socket";
@@ -48,7 +48,9 @@ export default function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const clearTokens = searchParams.get("clearTokens");
-  const { setRole, setSocket } = useAppContext();
+
+  const setSocket = useAppStore((state) => state.setSocket);
+  const setRole = useAppStore((state) => state.setRole);
 
   const loginMutation = useLoginMutation();
   const form = useForm<LoginBodyType>({

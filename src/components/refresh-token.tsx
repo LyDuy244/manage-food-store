@@ -1,5 +1,5 @@
 "use client";
-import { useAppContext } from "@/components/app-provider";
+import { useAppStore } from "@/components/app-provider";
 import { checkAndRefreshToken } from "@/lib/utils";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -7,7 +7,8 @@ import { useEffect } from "react";
 // Những page không check refresh token
 const UNAUTHENTICATED_PATH = ["/login", "register", "refresh-token"];
 export default function RefreshToken() {
-  const { socket, disconnectSocket } = useAppContext();
+  const socket = useAppStore((state) => state.socket);
+  const disconnectSocket = useAppStore((state) => state.disconnectSocket);
   const pathname = usePathname();
   const router = useRouter();
 

@@ -1,6 +1,6 @@
 "use client";
 import { useLogoutMutation } from "@/app/queries/useAuth";
-import { useAppContext } from "@/components/app-provider";
+import { useAppStore } from "@/components/app-provider";
 import {
   getAccessTokenFromLocalStorage,
   getRefreshTokenFromLocalStorage,
@@ -10,7 +10,9 @@ import React, { Suspense, useEffect, useRef } from "react";
 
 function Logout() {
   const { mutateAsync } = useLogoutMutation();
-  const { setRole, socket, setSocket, disconnectSocket } = useAppContext();
+
+  const disconnectSocket = useAppStore((state) => state.disconnectSocket);
+  const setRole = useAppStore((state) => state.setRole);
   const router = useRouter();
   const ref = useRef<any>(null);
   const searchParams = useSearchParams();
