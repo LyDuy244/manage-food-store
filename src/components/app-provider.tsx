@@ -1,5 +1,5 @@
 "use client";
-import ListenLogoutSocket from "@/components/listenLogoutSocket";
+import ListenLogoutSocket from "@/components/listen-logout-socket";
 import RefreshToken from "@/components/refresh-token";
 import envConfig from "@/config";
 import { generateSocketInstance } from "@/lib/socket";
