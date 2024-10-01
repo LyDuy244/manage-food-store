@@ -153,12 +153,13 @@ export default function AutoPagination({
           ) : (
             <Button
               disabled={page === 1}
-              className=" h-9 p-0 px-2"
+              className="h-9 p-0 px-2"
+              variant={"ghost"}
               onClick={() => {
                 onClick(page - 1);
               }}
             >
-              <ChevronLeft className="w-5 h-5" /> Next
+              <ChevronLeft className="w-5 h-5" /> Previous
             </Button>
           )}
         </PaginationItem>
@@ -177,21 +178,21 @@ export default function AutoPagination({
                 "cursor-not-allowed": page === pageSize,
               })}
               onClick={(e) => {
-                if (page === 1) {
+                if (page === pageSize) {
                   e.preventDefault();
                 }
               }}
             />
           ) : (
             <Button
-              disabled={page === 1}
-              className=" h-9 p-0 py-2"
+              disabled={page === pageSize}
+              className="h-9 p-0 px-2"
+              variant={"ghost"}
               onClick={() => {
-                onClick(page - 1);
+                onClick(page + 1);
               }}
-              variant="ghost"
             >
-              Previous <ChevronRight className="w-5 h-5" />
+              Next <ChevronRight className="w-5 h-5" />
             </Button>
           )}
         </PaginationItem>
