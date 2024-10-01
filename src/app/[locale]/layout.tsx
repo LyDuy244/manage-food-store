@@ -8,18 +8,34 @@ import AppProvider from "@/components/app-provider";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, unstable_setRequestLocale } from "next-intl/server";
 import { locales } from "@/config";
+import { getTranslations } from "next-intl/server";
 
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
 });
-export const metadata: Metadata = {
-  title: "Big Boy Restaurant",
-  description: "The best restaurant in the world",
-};
+// export const metadata: Metadata = {
+//   title: "Ngoc Duy Restaurant",
+//   description: "The best restaurant in the world",
+// };
+
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: string };
+}) {
+  const t = await getTranslations({ locale, namespace: "Brand" });
+
+  return {
+    title: {
+      template: `%s | ${t("title")}`,
+      default: t("defaultTitle"),
+    },
+  };
+}
 
 export function generateStaticParams() {
-  return locales.map((locale) => ({locale}));
+  return locales.map((locale) => ({ locale }));
 }
 
 export default async function RootLayout({

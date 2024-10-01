@@ -4,6 +4,20 @@ import { DishListResType } from "@/schemaValidations/dish.schema";
 import Image from "next/image";
 import { Link } from "@/navigation";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
+import { Locale } from "@/config";
+
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: Locale };
+}) {
+  const t = await getTranslations({ locale, namespace: "HomePage" });
+  return {
+    title: t("title"),
+    description: t("description"),
+  };
+}
+
 export default async function Home({
   params: { locale },
 }: {

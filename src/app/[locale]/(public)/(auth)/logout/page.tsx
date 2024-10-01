@@ -1,56 +1,14 @@
-"use client";
-import { useLogoutMutation } from "@/app/[locale]/queries/useAuth";
-import { useAppStore } from "@/components/app-provider";
-import {
-  getAccessTokenFromLocalStorage,
-  getRefreshTokenFromLocalStorage,
-} from "@/lib/utils";
-import { useSearchParams } from "next/navigation";
-import { useRouter } from "@/navigation";
-import React, { Suspense, useEffect, useRef } from "react";
+import Logout from "@/app/[locale]/(public)/(auth)/logout/logout";
+import { Metadata } from "next";
+import React, { Suspense } from "react";
 
-function Logout() {
-  const { mutateAsync } = useLogoutMutation();
-
-  const disconnectSocket = useAppStore((state) => state.disconnectSocket);
-  const setRole = useAppStore((state) => state.setRole);
-  const router = useRouter();
-  const ref = useRef<any>(null);
-  const searchParams = useSearchParams();
-  const refreshTokenFromUrl = searchParams.get("refreshToken");
-  const accessTokenFromUrl = searchParams.get("accessToken");
-  useEffect(() => {
-    if (
-      !ref.current ||
-      refreshTokenFromUrl ||
-      accessTokenFromUrl ||
-      (refreshTokenFromUrl &&
-        refreshTokenFromUrl === getRefreshTokenFromLocalStorage()) ||
-      (accessTokenFromUrl &&
-        accessTokenFromUrl === getAccessTokenFromLocalStorage())
-    ) {
-      ref.current = mutateAsync().then((res) => {
-        setTimeout(() => {
-          ref.current = null;
-        }, 1000);
-        setRole();
-        disconnectSocket();
-        router.push("login");
-      });
-    } else {
-      router.push("/");
-    }
-  }, [
-    mutateAsync,
-    router,
-    refreshTokenFromUrl,
-    accessTokenFromUrl,
-    setRole,
-    disconnectSocket,
-  ]);
-
-  return <div>Log out...</div>;
-}
+export const metadata: Metadata = {
+  title: "Logout Redirect",
+  description: "Logout Redirect",
+  robots: {
+    index: false,
+  },
+};
 
 const LogoutPage = () => {
   return (

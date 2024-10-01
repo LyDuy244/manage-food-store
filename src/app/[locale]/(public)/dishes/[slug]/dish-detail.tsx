@@ -27,6 +27,7 @@ export default async function DishDetail({
         height={700}
         quality={100}
         className="object-cover  w-[500px] h-[500px] rounded-md"
+        title={dish.name}
       />
       <p>{dish.description}</p>
     </div>

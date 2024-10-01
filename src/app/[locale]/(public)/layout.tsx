@@ -26,7 +26,7 @@ export default function Layout({
             className="flex items-center gap-2 text-lg font-semibold md:text-base"
           >
             <Package2 className="h-6 w-6" />
-            <span className="sr-only">Big boy</span>
+            <span className="sr-only">Ngoc Duy</span>
           </Link>
           <NavItems className="text-muted-foreground transition-colors hover:text-foreground flex-shrink-0" />
         </nav>
@@ -48,7 +48,7 @@ export default function Layout({
                 className="flex items-center gap-2 text-lg font-semibold"
               >
                 <Package2 className="h-6 w-6" />
-                <span className="sr-only">Big boy</span>
+                <span className="sr-only">Ngoc Duy</span>
               </Link>
 
               <NavItems className="text-muted-foreground transition-colors hover:text-foreground" />
