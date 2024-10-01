@@ -21,7 +21,7 @@ export default function Modal({ children }: { children: React.ReactNode }) {
         if (!open) router.back();
       }}
     >
-      <DialogContent className="max-h-full overflow-auto">
+      <DialogContent className="h-[700px] overflow-auto max-w-[820px]">
         <DialogTitle />
         <DialogDescription />
         {children}

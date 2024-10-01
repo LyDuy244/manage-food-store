@@ -1,4 +1,3 @@
-"use client";
 import Oauth from "@/app/[locale]/(public)/(auth)/login/oauth/oauth";
 import { Metadata } from "next";
 import React, { Suspense } from "react";

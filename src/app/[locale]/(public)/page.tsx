@@ -82,7 +82,7 @@ export default async function Home({
               </div>
               <div className="space-y-1">
                 <h3 className="text-xl font-semibold">{dish.name}</h3>
-                <p className="">{dish.description}</p>
+                <p className="dish-description ">{dish.description}</p>
                 <p className="font-semibold">{formatCurrency(dish.price)}</p>
               </div>
             </Link>
