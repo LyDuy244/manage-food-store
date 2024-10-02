@@ -12,6 +12,7 @@ import { getTranslations } from "next-intl/server";
 import NextTopLoader from "nextjs-toploader";
 import Footer from "@/components/footer";
 import { baseOpenGraph } from "@/shared-metadata";
+import GoogleTag from "@/components/google-tag";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -35,8 +36,8 @@ export async function generateMetadata({
       default: t("defaultTitle"),
     },
     openGraph: {
-      ...baseOpenGraph
-    }
+      ...baseOpenGraph,
+    },
   };
 }
 
@@ -64,7 +65,10 @@ export default async function RootLayout({
           fontSans.variable
         )}
       >
-        <NextTopLoader showSpinner={false} color="hsl(var(--muted-foreground));"/>
+        <NextTopLoader
+          showSpinner={false}
+          color="hsl(var(--muted-foreground));"
+        />
         <NextIntlClientProvider messages={messages}>
           <AppProvider>
             <ThemeProvider
@@ -74,12 +78,13 @@ export default async function RootLayout({
               disableTransitionOnChange
             >
               {children}
-              <Footer/>
+              <Footer />
               <Toaster />
             </ThemeProvider>
           </AppProvider>
         </NextIntlClientProvider>
       </body>
+      <GoogleTag />
     </html>
   );
 }
