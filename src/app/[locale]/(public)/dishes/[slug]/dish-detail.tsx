@@ -33,7 +33,7 @@ export default async function DishDetail({
         className="object-cover  w-[700px] h-[500px] rounded-md"
         title={dish.name}
       />
-      <p>{dish.description}</p>
+      <p className="text-justify">{dish.description}</p>
     </div>
   );
 }

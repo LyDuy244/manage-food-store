@@ -4,16 +4,15 @@ import { EntityError } from "@/lib/http"
 import { clsx, type ClassValue } from "clsx"
 import { UseFormSetError } from "react-hook-form"
 import { twMerge } from "tailwind-merge"
-import jwt from "jsonwebtoken";
 import { DishStatus, OrderStatus, Role, TableStatus } from "@/constants/type"
-import envConfig from "@/config"
+import envConfig, { defaultLocale } from "@/config"
 import { TokenPayload } from "@/types/jwt.types"
 import guestApiRequest from "@/apiRequests/guest"
 import { BookX, CookingPot, HandCoins, Loader, Truck } from 'lucide-react'
 import { format } from "date-fns"
 import { io } from "socket.io-client"
 import slugify from "slugify"
-import { convert } from "html-to-text"
+import { jwtDecode } from "jwt-decode";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
@@ -150,11 +149,11 @@ export const getVietnameseTableStatus = (status: (typeof TableStatus)[keyof type
 }
 
 export const getTableLink = ({ token, tableNumber }: { token: string; tableNumber: number }) => {
-  return envConfig.NEXT_PUBLIC_URL + '/vi/tables/' + tableNumber + '?token=' + token
+  return envConfig.NEXT_PUBLIC_URL + `/${defaultLocale}/tables/` + tableNumber + '?token=' + token
 }
 
 export const decodeToken = (token: string) => {
-  return jwt.decode(token) as TokenPayload;
+  return jwtDecode(token) as TokenPayload;
 }
 export function removeAccents(str: string) {
   return str
@@ -210,10 +209,3 @@ export const getIdFromSlugify = (slugify: string) => {
   return Number(slugify.split('-i.')[1]);
 }
 
-export const htmlToTextForDescription = (html: string) => {
-  return convert(html, {
-    limits: {
-      maxInputLength: 140
-    }
-  })
-}

@@ -1,14 +1,11 @@
 import dishApiRequest from "@/apiRequests/dish";
-import {
-  formatCurrency,
-  generateSlugUrl,
-  htmlToTextForDescription,
-} from "@/lib/utils";
+import { formatCurrency, generateSlugUrl } from "@/lib/utils";
 import { DishListResType } from "@/schemaValidations/dish.schema";
 import Image from "next/image";
 import { Link } from "@/navigation";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 import envConfig, { Locale } from "@/config";
+import { htmlToTextForDescription } from "@/lib/server-until";
 
 export async function generateMetadata({
   params: { locale },
@@ -54,8 +51,8 @@ export default async function Home({
           src="/banner.png"
           width={400}
           height={200}
-          quality={100}
-          priority={true}
+          quality={80}
+          loading="lazy"
           alt="Banner"
           title="banner"
           className="absolute top-0 left-0 w-full h-full object-cover"
@@ -87,14 +84,17 @@ export default async function Home({
                   alt={dish.name}
                   width={150}
                   height={150}
-                  quality={100}
+                  quality={80}
+                  loading="lazy"
                   title={dish.name}
                   className="object-cover w-[150px] h-[150px] rounded-md"
                 />
               </div>
               <div className="space-y-1">
-                <h3 className="text-xl font-semibold">{dish.name}</h3>
-                <p className="dish-description ">{dish.description}</p>
+                <h3 className="text-base font-semibold sm:text-xl">{dish.name}</h3>
+                <p className="dish-description text-justify">
+                  {dish.description}
+                </p>
                 <p className="font-semibold">{formatCurrency(dish.price)}</p>
               </div>
             </Link>

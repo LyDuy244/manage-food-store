@@ -1,11 +1,11 @@
 import dishApiRequest from "@/apiRequests/dish";
 import DishDetail from "@/app/[locale]/(public)/dishes/[slug]/dish-detail";
 import envConfig, { Locale } from "@/config";
+import { htmlToTextForDescription } from "@/lib/server-until";
 import {
   formatCurrency,
   generateSlugUrl,
   getIdFromSlugify,
-  htmlToTextForDescription,
   wrapServerApi,
 } from "@/lib/utils";
 import { baseOpenGraph } from "@/shared-metadata";
