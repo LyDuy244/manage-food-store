@@ -13,6 +13,7 @@ import { BookX, CookingPot, HandCoins, Loader, Truck } from 'lucide-react'
 import { format } from "date-fns"
 import { io } from "socket.io-client"
 import slugify from "slugify"
+import { convert } from "html-to-text"
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
@@ -207,4 +208,12 @@ export const generateSlugUrl = ({ name, id }: { name: string, id: number }) => {
 
 export const getIdFromSlugify = (slugify: string) => {
   return Number(slugify.split('-i.')[1]);
+}
+
+export const htmlToTextForDescription = (html: string) => {
+  return convert(html, {
+    limits: {
+      maxInputLength: 140
+    }
+  })
 }

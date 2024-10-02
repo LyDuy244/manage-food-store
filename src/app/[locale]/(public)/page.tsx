@@ -1,10 +1,14 @@
 import dishApiRequest from "@/apiRequests/dish";
-import { formatCurrency, generateSlugUrl } from "@/lib/utils";
+import {
+  formatCurrency,
+  generateSlugUrl,
+  htmlToTextForDescription,
+} from "@/lib/utils";
 import { DishListResType } from "@/schemaValidations/dish.schema";
 import Image from "next/image";
 import { Link } from "@/navigation";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
-import { Locale } from "@/config";
+import envConfig, { Locale } from "@/config";
 
 export async function generateMetadata({
   params: { locale },
@@ -12,9 +16,15 @@ export async function generateMetadata({
   params: { locale: Locale };
 }) {
   const t = await getTranslations({ locale, namespace: "HomePage" });
+
+  const url = envConfig.NEXT_PUBLIC_URL + `/${locale}`;
+
   return {
     title: t("title"),
-    description: t("description"),
+    description: htmlToTextForDescription(t("description")),
+    alternates: {
+      canonical: url,
+    },
   };
 }
 
@@ -47,6 +57,7 @@ export default async function Home({
           quality={100}
           priority={true}
           alt="Banner"
+          title="banner"
           className="absolute top-0 left-0 w-full h-full object-cover"
         />
         <div className="z-20 relative py-10 md:py-20 px-4 sm:px-10 md:px-20">
@@ -77,6 +88,7 @@ export default async function Home({
                   width={150}
                   height={150}
                   quality={100}
+                  title={dish.name}
                   className="object-cover w-[150px] h-[150px] rounded-md"
                 />
               </div>

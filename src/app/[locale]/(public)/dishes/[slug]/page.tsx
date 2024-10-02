@@ -5,6 +5,7 @@ import {
   formatCurrency,
   generateSlugUrl,
   getIdFromSlugify,
+  htmlToTextForDescription,
   wrapServerApi,
 } from "@/lib/utils";
 import { baseOpenGraph } from "@/shared-metadata";
@@ -44,11 +45,11 @@ export async function generateMetadata({
     })}`;
   return {
     title: dish.name,
-    description: dish.description,
+    description: htmlToTextForDescription(dish.description),
     openGraph: {
       ...baseOpenGraph,
       title: dish.name,
-      description: dish.description,
+      description: htmlToTextForDescription(dish.description),
       url,
       images: [
         {

@@ -86,6 +86,7 @@ export default function MenuOrder() {
                 height={100}
                 width={100}
                 quality={100}
+                title={dish.name}
                 className="object-cover w-[80px] h-[80px] rounded-md"
               />
             </div>

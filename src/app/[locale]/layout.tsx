@@ -9,6 +9,9 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages, unstable_setRequestLocale } from "next-intl/server";
 import { locales } from "@/config";
 import { getTranslations } from "next-intl/server";
+import NextTopLoader from "nextjs-toploader";
+import Footer from "@/components/footer";
+import { baseOpenGraph } from "@/shared-metadata";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -31,6 +34,9 @@ export async function generateMetadata({
       template: `%s | ${t("title")}`,
       default: t("defaultTitle"),
     },
+    openGraph: {
+      ...baseOpenGraph
+    }
   };
 }
 
@@ -58,6 +64,7 @@ export default async function RootLayout({
           fontSans.variable
         )}
       >
+        <NextTopLoader showSpinner={false} color="hsl(var(--muted-foreground));"/>
         <NextIntlClientProvider messages={messages}>
           <AppProvider>
             <ThemeProvider
@@ -67,6 +74,7 @@ export default async function RootLayout({
               disableTransitionOnChange
             >
               {children}
+              <Footer/>
               <Toaster />
             </ThemeProvider>
           </AppProvider>

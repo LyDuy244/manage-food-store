@@ -80,6 +80,7 @@ export const columns: ColumnDef<DishItem>[] = [
         <Image
           src={row.original.image}
           alt={row.original.name}
+          title={row.original.name}
           width={50}
           height={50}
           className="rounded-md object-cover w-[50px] h-[50px]"

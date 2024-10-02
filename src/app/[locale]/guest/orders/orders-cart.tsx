@@ -118,6 +118,7 @@ export default function OrdersCart() {
               width={100}
               quality={100}
               priority={true}
+              title={order.dishSnapshot.name}
               className="object-cover w-[80px] h-[80px] rounded-md"
             />
           </div>
