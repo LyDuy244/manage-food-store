@@ -1,6 +1,7 @@
 import dishApiRequest from "@/apiRequests/dish";
 import { formatCurrency, wrapServerApi } from "@/lib/utils";
 import { DishResType } from "@/schemaValidations/dish.schema";
+import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import React from "react";
 
@@ -9,11 +10,13 @@ export default async function DishDetail({
 }: {
   dish: DishResType["data"] | undefined;
 }) {
+  const t = await getTranslations("DishDetail");
+  
   if (!dish)
     return (
       <div>
         <h1 className="text-2xl lg:text-3xl font-semibold text-center">
-          Món ăn không tồn tại
+          {t("notFound")}
         </h1>
       </div>
     );

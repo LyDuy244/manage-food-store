@@ -13,7 +13,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { useChangePasswordMutation } from "@/app/[locale]/queries/useAccount";
 import { toast } from "@/hooks/use-toast";
-import { handleErrorApi } from "@/lib/utils";
+import {
+  handleErrorApi,
+  setAccessTokenToLocalStorage,
+  setRefreshTokenToLocalStorage,
+} from "@/lib/utils";
 
 export default function ChangePasswordForm() {
   const changePasswordMutation = useChangePasswordMutation();
@@ -30,6 +34,8 @@ export default function ChangePasswordForm() {
     if (changePasswordMutation.isPending) return;
     try {
       const result = await changePasswordMutation.mutateAsync(data);
+      setRefreshTokenToLocalStorage(result.payload.data.refreshToken);
+      setAccessTokenToLocalStorage(result.payload.data.accessToken);
       toast({ description: result.payload.message });
     } catch (error) {
       handleErrorApi({ error, setError: form.setError });

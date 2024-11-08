@@ -1,5 +1,8 @@
 {
-  "extends": ["next", "plugin:@tanstack/eslint-plugin-query/recommended"],
+  "extends": [
+    "plugin:@tanstack/eslint-plugin-query/recommended",
+    "next/core-web-vitals"
+  ],
   "rules": {
     "react/no-unescaped-entities": "off",
     "@next/next/no-page-custom-font": "off"

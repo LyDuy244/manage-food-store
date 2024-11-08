@@ -4,7 +4,7 @@ import { useAppStore } from "@/components/app-provider";
 import { toast } from "@/hooks/use-toast";
 import { generateSocketInstance } from "@/lib/socket";
 import { decodeToken } from "@/lib/utils";
-import { useRouter } from "@/navigation";
+import { useRouter } from "@/i18n/routing";
 import { Metadata } from "next";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";

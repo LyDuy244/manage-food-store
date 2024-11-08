@@ -1,7 +1,7 @@
 "use client";
 import { useAppStore } from "@/components/app-provider";
 import { checkAndRefreshToken } from "@/lib/utils";
-import { usePathname, useRouter } from "@/navigation";
+import { usePathname, useRouter } from "@/i18n/routing";
 import { useEffect } from "react";
 
 // Những page không check refresh token
@@ -39,11 +39,11 @@ export default function RefreshToken() {
       onConnect();
     }
     function onConnect() {
-      console.log(socket?.id);
+      // console.log(socket?.id);
     }
 
     function onDisconnect() {
-      console.log("disconnect");
+      // console.log("disconnect");
     }
     function onRefreshTokenSocket() {
       onRefreshToken(true);

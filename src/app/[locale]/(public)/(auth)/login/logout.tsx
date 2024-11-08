@@ -6,7 +6,7 @@ import {
   getRefreshTokenFromLocalStorage,
 } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
-import { useRouter } from "@/navigation";
+import { useRouter } from "@/i18n/routing";
 import React, { memo, Suspense, useEffect, useRef } from "react";
 
 function LogoutComponent() {
@@ -20,8 +20,8 @@ function LogoutComponent() {
   const accessTokenFromUrl = searchParams.get("accessToken");
   useEffect(() => {
     if (
-      !ref.current &&
-      (refreshTokenFromUrl &&
+      (!ref.current &&
+        refreshTokenFromUrl &&
         refreshTokenFromUrl === getRefreshTokenFromLocalStorage()) ||
       (accessTokenFromUrl &&
         accessTokenFromUrl === getAccessTokenFromLocalStorage())

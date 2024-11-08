@@ -5,9 +5,8 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import { useRouter } from "@/navigation";
+import { useRouter } from "@/i18n/routing";
 import React, { useEffect, useState } from "react";
 
 export default function Modal({ children }: { children: React.ReactNode }) {
@@ -22,8 +21,10 @@ export default function Modal({ children }: { children: React.ReactNode }) {
       }}
     >
       <DialogContent className="h-[700px] overflow-auto max-w-[820px]">
-        <DialogTitle />
-        <DialogDescription />
+        <DialogHeader className="hidden">
+          <DialogTitle />
+          <DialogDescription />
+        </DialogHeader>
         {children}
       </DialogContent>
     </Dialog>

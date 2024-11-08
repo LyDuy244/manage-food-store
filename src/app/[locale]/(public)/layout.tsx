@@ -1,11 +1,17 @@
 import { Menu, Package2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import DarkModeToggle from "@/components/dark-mode-toggle";
 import NavItems from "@/app/[locale]/(public)/nav-items";
-import { Link } from "@/navigation";
+import { Link } from "@/i18n/routing";
 import SwitchLanguage from "@/components/switch-language";
-import { unstable_setRequestLocale } from "next-intl/server";
 
 export default function Layout({
   children,
@@ -16,7 +22,6 @@ export default function Layout({
   modal: React.ReactNode;
   params: { locale: string };
 }>) {
-  unstable_setRequestLocale(locale);
   return (
     <div className="flex min-h-screen w-full flex-col relative">
       <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6 z-50">
@@ -42,6 +47,10 @@ export default function Layout({
             </Button>
           </SheetTrigger>
           <SheetContent side="left">
+            <SheetHeader className="hidden">
+              <SheetTitle></SheetTitle>
+              <SheetDescription></SheetDescription>
+            </SheetHeader>
             <nav className="grid gap-6 text-lg font-medium">
               <Link
                 href="#"

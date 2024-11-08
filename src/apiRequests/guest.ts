@@ -34,7 +34,7 @@ const guestApiRequest = {
         this.refreshTokenRequest = null
         return result
     },
-    order: (body: GuestCreateOrdersBodyType)=> http.post<GuestCreateOrdersResType>('/guest/orders', body),
+    order: (body: GuestCreateOrdersBodyType) => http.post<GuestCreateOrdersResType>('/guest/orders', body),
     getOrderList: () => http.get<GuestGetOrdersResType>("/guest/orders")
 }
 

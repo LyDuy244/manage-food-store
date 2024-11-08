@@ -10,8 +10,8 @@ import {
   getRoleFromClient,
 } from "@/lib/utils";
 import { Package2, PanelLeft } from "lucide-react";
-import { Link } from "@/navigation";
-import { usePathname } from "@/navigation";
+import { Link } from "@/i18n/routing";
+import { usePathname } from "@/i18n/routing";
 
 export default function MobileNavLinks() {
   const pathname = usePathname();

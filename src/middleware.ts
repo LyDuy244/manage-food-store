@@ -3,7 +3,8 @@ import { decodeToken } from '@/lib/utils';
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import createIntlMiddleware from 'next-intl/middleware'
-import { locales, defaultLocale } from '@/config';
+import { routing } from './i18n/routing';
+import { defaultLocale } from '@/config';
 const guestPaths = ["/vi/guest", "/en/guest"];
 const managePaths = ['/vi/manage', '/en/manage']
 const privatePaths = [...guestPaths, ...managePaths];
@@ -13,10 +14,7 @@ const onlyOwnerPaths = ["/vi/manage/accounts", "/en/manage/accounts"]
 
 // This function can be marked `async` if using `await` inside
 export function middleware(request: NextRequest) {
-    const handleI18nRouting = createIntlMiddleware({
-        locales,
-        defaultLocale
-    });
+    const handleI18nRouting = createIntlMiddleware(routing);
     const response = handleI18nRouting(request);
 
     const { pathname, searchParams } = request.nextUrl;

@@ -9,8 +9,8 @@ import {
 } from "@/components/ui/tooltip";
 import { cn, getRoleFromClient } from "@/lib/utils";
 import { Package2, Settings } from "lucide-react";
-import { Link } from "@/navigation";
-import { usePathname } from "@/navigation";
+import { Link } from "@/i18n/routing";
+import { usePathname } from "@/i18n/routing";
 import { useEffect } from "react";
 
 export default function NavLinks() {

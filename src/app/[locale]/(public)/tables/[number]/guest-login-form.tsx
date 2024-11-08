@@ -11,7 +11,7 @@ import {
   GuestLoginBodyType,
 } from "@/schemaValidations/guest.schema";
 import { useSearchParams, useParams } from "next/navigation";
-import { useRouter } from "@/navigation";
+import { useRouter } from "@/i18n/routing";
 import { useEffect } from "react";
 import { useGuestLoginMutation } from "@/app/[locale]/queries/useGuest";
 import { handleErrorApi } from "@/lib/utils";

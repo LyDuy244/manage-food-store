@@ -201,11 +201,10 @@ export const wrapServerApi = async <T>(fn: () => Promise<T>) => {
   return result;
 }
 
-export const generateSlugUrl = ({ name, id }: { name: string, id: number }) => {
-  return `${slugify(name.toLowerCase())}-i.${id}`;
+export const generateSlugUrl = ({ name, id }: { name: string; id: number }) => {
+  return `${slugify(name)}-i.${id}`
 }
 
-export const getIdFromSlugify = (slugify: string) => {
-  return Number(slugify.split('-i.')[1]);
+export const getIdFromSlugify = (slug: string) => {
+  return Number(slug.split('-i.')[1])
 }
-

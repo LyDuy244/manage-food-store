@@ -1,7 +1,7 @@
 import LoginForm from "@/app/[locale]/(public)/(auth)/login/login-form";
 import Logout from "@/app/[locale]/(public)/(auth)/login/logout";
 import envConfig, { Locale } from "@/config";
-import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 export async function generateMetadata({
   params: { locale },
@@ -25,7 +25,7 @@ export default function Login({
 }: {
   params: { locale: Locale };
 }) {
-  unstable_setRequestLocale(locale);
+  setRequestLocale(locale);
 
   return (
     <div className="min-h-screen flex items-center justify-center">

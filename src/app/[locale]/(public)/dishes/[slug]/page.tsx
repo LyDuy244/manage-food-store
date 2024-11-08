@@ -80,5 +80,7 @@ export default async function DishPage({
   const id = getIdFromSlugify(slug);
   const data = await wrapServerApi(() => dishApiRequest.getDish(id));
   const dish = data?.payload.data;
+  console.log(data);
+
   return <DishDetail dish={dish}></DishDetail>;
 }

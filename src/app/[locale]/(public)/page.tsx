@@ -2,18 +2,20 @@ import dishApiRequest from "@/apiRequests/dish";
 import { formatCurrency, generateSlugUrl } from "@/lib/utils";
 import { DishListResType } from "@/schemaValidations/dish.schema";
 import Image from "next/image";
-import { Link } from "@/navigation";
-import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
+import { Link } from "@/i18n/routing";
+import { getTranslations } from "next-intl/server";
+import { setRequestLocale } from "next-intl/server";
 import envConfig, { Locale } from "@/config";
 import { htmlToTextForDescription } from "@/lib/server-until";
 
-export async function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: Locale };
+export async function generateMetadata(props: {
+  params: Promise<{ locale: Locale }>;
 }) {
-  const t = await getTranslations({ locale, namespace: "HomePage" });
+  const params = await props.params;
 
+  const { locale } = params;
+
+  const t = await getTranslations({ locale, namespace: "HomePage" });
   const url = envConfig.NEXT_PUBLIC_URL + `/${locale}`;
 
   return {
@@ -25,13 +27,16 @@ export async function generateMetadata({
   };
 }
 
-export default async function Home({
-  params: { locale },
-}: {
-  params: { locale: string };
+export default async function Home(props: {
+  params: Promise<{ locale: string }>;
 }) {
-  unstable_setRequestLocale(locale);
-  let dishList: DishListResType["data"] | [] = [];
+  const params = await props.params;
+
+  const { locale } = params;
+
+  setRequestLocale(locale);
+  const t = await getTranslations("HomePage");
+  let dishList: DishListResType["data"] = [];
   try {
     const result = await dishApiRequest.list();
     const {
@@ -39,10 +44,8 @@ export default async function Home({
     } = result;
     dishList = data;
   } catch (error) {
-    return <div>Something went wrong...</div>;
+    return <div>Something went wrong</div>;
   }
-  const t = await getTranslations("HomePage");
-
   return (
     <div className="w-full space-y-4">
       <section className="relative z-10">
@@ -54,20 +57,17 @@ export default async function Home({
           quality={80}
           loading="lazy"
           alt="Banner"
-          title="banner"
           className="absolute top-0 left-0 w-full h-full object-cover"
         />
         <div className="z-20 relative py-10 md:py-20 px-4 sm:px-10 md:px-20">
-          <h1 className="text-center text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold text-white">
+          <h1 className="text-center text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold">
             {t("title")}
           </h1>
-          <p className="text-center text-sm sm:text-base mt-4 text-white">
-            Vị ngon, trọn khoảnh khắc
-          </p>
+          <p className="text-center text-sm sm:text-base mt-4">{t("slogan")}</p>
         </div>
       </section>
       <section className="space-y-10 py-16">
-        <h2 className="text-center text-2xl font-bold">Đa dạng các món ăn</h2>
+        <h2 className="text-center text-2xl font-bold">{t("h2")}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
           {dishList.map((dish) => (
             <Link
@@ -81,20 +81,17 @@ export default async function Home({
               <div className="flex-shrink-0">
                 <Image
                   src={dish.image}
-                  alt={dish.name}
                   width={150}
                   height={150}
                   quality={80}
                   loading="lazy"
-                  title={dish.name}
+                  alt={dish.name}
                   className="object-cover w-[150px] h-[150px] rounded-md"
                 />
               </div>
               <div className="space-y-1">
-                <h3 className="text-base font-semibold sm:text-xl">{dish.name}</h3>
-                <p className="dish-description text-justify">
-                  {dish.description}
-                </p>
+                <h3 className="text-xl font-semibold">{dish.name}</h3>
+                <p className="">{dish.description}</p>
                 <p className="font-semibold">{formatCurrency(dish.price)}</p>
               </div>
             </Link>

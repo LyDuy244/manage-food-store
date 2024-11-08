@@ -10,8 +10,8 @@ import {
   handleErrorApi,
 } from "@/lib/utils";
 import { RoleType } from "@/types/jwt.types";
-import { Link } from "@/navigation";
-import { useRouter } from "@/navigation";
+import { Link } from "@/i18n/routing";
+import { useRouter } from "@/i18n/routing";
 import { useEffect, useState } from "react";
 import {
   AlertDialog,
@@ -105,18 +105,24 @@ export default function NavItems({ className }: { className?: string }) {
       {role && (
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <div className={cn(className, "cursor-pointer")}>Đăng xuất</div>
+            <div className={cn(className, "cursor-pointer")}>{t("logout")}</div>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Bạn có muốn đăng xuất không?</AlertDialogTitle>
+              <AlertDialogTitle>
+                {t("logoutDialog.logoutQuestion")}
+              </AlertDialogTitle>
               <AlertDialogDescription>
-                Việc đăng xuất có thể làm mất đi hóa đơn của bạn!
+                {t("logoutDialog.logoutConfirm")}
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={logout}>Thoát</AlertDialogAction>
+              <AlertDialogCancel>
+                {t("logoutDialog.logoutCancel")}
+              </AlertDialogCancel>
+              <AlertDialogAction onClick={logout}>
+                {t("logout")}
+              </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>

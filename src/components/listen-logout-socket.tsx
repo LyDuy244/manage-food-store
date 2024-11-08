@@ -1,7 +1,7 @@
 import { useLogoutMutation } from "@/app/[locale]/queries/useAuth";
 import { useAppStore } from "@/components/app-provider";
 import { handleErrorApi } from "@/lib/utils";
-import { usePathname, useRouter } from "@/navigation";
+import { usePathname, useRouter } from "@/i18n/routing";
 import React, { useEffect } from "react";
 const UNAUTHENTICATED_PATH = ["/login", "register", "refresh-token"];
 

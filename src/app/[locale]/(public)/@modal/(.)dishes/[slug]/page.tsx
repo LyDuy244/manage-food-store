@@ -1,8 +1,7 @@
 import dishApiRequest from "@/apiRequests/dish";
 import Modal from "@/app/[locale]/(public)/@modal/(.)dishes/[slug]/modal";
 import DishDetail from "@/app/[locale]/(public)/dishes/[slug]/dish-detail";
-import { formatCurrency, getIdFromSlugify, wrapServerApi } from "@/lib/utils";
-import Image from "next/image";
+import { getIdFromSlugify, wrapServerApi } from "@/lib/utils";
 import React from "react";
 
 export default async function DishPage({

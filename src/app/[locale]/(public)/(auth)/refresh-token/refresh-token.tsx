@@ -4,7 +4,7 @@ import {
   getRefreshTokenFromLocalStorage,
 } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
-import { useRouter } from "@/navigation";
+import { useRouter } from "@/i18n/routing";
 import React, { useEffect, useRef } from "react";
 
 function RefreshToken() {

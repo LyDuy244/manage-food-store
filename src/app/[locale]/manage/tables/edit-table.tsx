@@ -36,7 +36,7 @@ import {
 } from "@/schemaValidations/table.schema";
 import { TableStatus, TableStatusValues } from "@/constants/type";
 import { Switch } from "@/components/ui/switch";
-import { Link } from "@/navigation";
+import { Link } from "@/i18n/routing";
 import {
   useGetTableQuery,
   useUpdateTableMutation,

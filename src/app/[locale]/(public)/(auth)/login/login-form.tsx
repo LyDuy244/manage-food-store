@@ -15,20 +15,14 @@ import { LoginBody, LoginBodyType } from "@/schemaValidations/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLoginMutation } from "@/app/[locale]/queries/useAuth";
 import { toast } from "@/hooks/use-toast";
-import {
-  getAccessTokenFromLocalStorage,
-  handleErrorApi,
-  removeTokensFromLocalStorage,
-} from "@/lib/utils";
-import { useRouter } from "@/navigation";
-import { useEffect, useState } from "react";
+import { handleErrorApi } from "@/lib/utils";
+import { useRouter } from "@/i18n/routing";
+import { useEffect } from "react";
 import { useAppStore } from "@/components/app-provider";
-import { io } from "socket.io-client";
 import envConfig from "@/config";
 import { generateSocketInstance } from "@/lib/socket";
-import { Link } from "@/navigation";
+import { Link } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
-import { useSearchParams } from "next/navigation";
 import SearchParamsLoader, {
   useSearchParamsLoader,
 } from "@/components/search-params-loader";
