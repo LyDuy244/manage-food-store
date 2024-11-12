@@ -4,11 +4,17 @@ import DishDetail from "@/app/[locale]/(public)/dishes/[slug]/dish-detail";
 import { getIdFromSlugify, wrapServerApi } from "@/lib/utils";
 import React from "react";
 
-export default async function DishPage({
-  params: { slug },
-}: {
-  params: { slug: string };
-}) {
+export default async function DishPage(
+  props: {
+    params: Promise<{ slug: string }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    slug
+  } = params;
+
   const id = getIdFromSlugify(slug);
   const data = await wrapServerApi(() => dishApiRequest.getDish(Number(id)));
   const dish = data?.payload.data;

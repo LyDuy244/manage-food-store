@@ -60,8 +60,8 @@ export default function LoginForm() {
   const form = useForm<LoginBodyType>({
     resolver: zodResolver(LoginBody),
     defaultValues: {
-      email: "",
-      password: "",
+      email: envConfig.NEXT_PUBLIC_INITIAL_EMAIL_OWNER,
+      password: envConfig.NEXT_PUBLIC_INITIAL_PASSWORD_OWNER,
     },
   });
 

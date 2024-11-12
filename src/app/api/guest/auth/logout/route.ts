@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import guestApiRequest from "@/apiRequests/guest";
 export async function POST(request: Request) {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const accessToken = cookieStore.get("accessToken")?.value;
     const refreshToken = cookieStore.get("refreshToken")?.value;
     cookieStore.delete("accessToken")

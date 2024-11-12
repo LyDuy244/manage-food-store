@@ -13,15 +13,19 @@ import NavItems from "@/app/[locale]/(public)/nav-items";
 import { Link } from "@/i18n/routing";
 import SwitchLanguage from "@/components/switch-language";
 
-export default function Layout({
-  children,
-  modal,
-  params: { locale },
-}: Readonly<{
-  children: React.ReactNode;
-  modal: React.ReactNode;
-  params: { locale: string };
-}>) {
+export default async function Layout(
+  props: Readonly<{
+    children: React.ReactNode;
+    modal: React.ReactNode;
+    params: Promise<{ locale: string }>;
+  }>
+) {
+  const params = await props.params;
+
+  const { locale } = params;
+
+  const { children, modal } = props;
+
   return (
     <div className="flex min-h-screen w-full flex-col relative">
       <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6 z-50">

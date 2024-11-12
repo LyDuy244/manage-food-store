@@ -17,13 +17,11 @@ const getDetail = cache((id: number) =>
   wrapServerApi(() => dishApiRequest.getDish(id))
 );
 type Props = {
-  params: { slug: string; locale: Locale };
-  searchParams: { [key: string]: string | string[] | undefined };
+  params: Promise<{ slug: string; locale: Locale }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
-export async function generateMetadata({
-  params,
-  searchParams,
-}: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const t = await getTranslations({
     locale: params.locale,
     namespace: "DishDetail",
@@ -72,11 +70,17 @@ export async function generateMetadata({
 //   }));
 // }
 
-export default async function DishPage({
-  params: { slug },
-}: {
-  params: { slug: string };
-}) {
+export default async function DishPage(
+  props: {
+    params: Promise<{ slug: string }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    slug
+  } = params;
+
   const id = getIdFromSlugify(slug);
   const data = await wrapServerApi(() => dishApiRequest.getDish(id));
   const dish = data?.payload.data;
